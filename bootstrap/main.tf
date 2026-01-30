@@ -187,7 +187,6 @@ resource "aws_codepipeline" "frontend_pipeline" {
         Owner      = "lakshmichennur22-lgtm"
         Repo       = "https://github.com/lakshmichennur22-lgtm/codepipeline_hospital.git"
         Branch     = "main"
-        OAuthToken = "GITHUB_TOKEN"
       }
     }
   }
