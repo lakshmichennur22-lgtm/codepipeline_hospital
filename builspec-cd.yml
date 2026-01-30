@@ -1,0 +1,6 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - echo "Deploy handled by CodePipeline S3 action"

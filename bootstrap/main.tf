@@ -181,8 +181,58 @@ resource "aws_codestarconnections_connection" "github" {
 # -----------------------------
 # CODEPIPELINE
 # -----------------------------
-resource "aws_codepipeline" "frontend_pipeline" {
-  name     = "frontend-orchestrator"
+resource "aws_codepipeline" "frontend_infrapipeline" {
+  name     = "frontend-infra"
+  role_arn = aws_iam_role.codepipeline_role.arn
+
+  artifact_store {
+    location = aws_s3_bucket.artifacts.bucket
+    type     = "S3"
+  }
+
+  # SOURCE STAGE
+  stage {
+    name = "Source"
+
+    action {
+      name             = "GitHub_Source"
+      category         = "Source"
+      owner            = "AWS"
+      provider         = "CodeStarSourceConnection"
+      version          = "1"
+      output_artifacts = ["source"]
+      run_order = 1
+      configuration = {
+        ConnectionArn    = aws_codestarconnections_connection.github.arn
+        FullRepositoryId = "lakshmichennur22-lgtm/codepipeline_hospital"
+        BranchName       = "main"
+      }
+    }
+  }
+
+  # INFRA STAGE
+  stage {
+    name = "Infra"
+
+    action {
+      name            = "Terraform_Apply"
+      category        = "Build"
+      owner           = "AWS"
+      provider        = "CodeBuild"
+      version         = "1"
+      input_artifacts = ["source"]
+
+      configuration = {
+        ProjectName = aws_codebuild_project.infra.name
+      }
+    }
+  }
+}
+# -----------------------------
+# CODEPIPELINE
+# -----------------------------
+resource "aws_codepipeline" "CICD_pipeline" {
+  name     = "CICD-orchestrator"
   role_arn = aws_iam_role.codepipeline_role.arn
 
   artifact_store {
@@ -265,21 +315,37 @@ resource "aws_codepipeline" "frontend_pipeline" {
       }
     }
   }
+}
+resource "aws_codepipeline" "cleanup_infrapipeline" {
+  name     = "cleanup-infra"
+  role_arn = aws_iam_role.codepipeline_role.arn
 
-  # MANUAL APPROVAL
+  artifact_store {
+    location = aws_s3_bucket.artifacts.bucket
+    type     = "S3"
+  }
+
+  # SOURCE STAGE
   stage {
-    name = "Approval"
+    name = "Source"
 
     action {
-      name     = "Manual_Approval"
-      category = "Approval"
-      owner    = "AWS"
-      provider = "Manual"
-      version  = "1"
+      name             = "GitHub_Source"
+      category         = "Source"
+      owner            = "AWS"
+      provider         = "CodeStarSourceConnection"
+      version          = "1"
+      output_artifacts = ["source"]
+      run_order = 1
+      configuration = {
+        ConnectionArn    = aws_codestarconnections_connection.github.arn
+        FullRepositoryId = "lakshmichennur22-lgtm/codepipeline_hospital"
+        BranchName       = "main"
+      }
     }
   }
 
-  # CLEANUP STAGE
+# CLEANUP STAGE
   stage {
     name = "Cleanup"
 
