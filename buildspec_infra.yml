@@ -1,0 +1,17 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - curl -o terraform.zip https://releases.hashicorp.com/terraform/1.6.6/terraform_1.6.6_linux_amd64.zip
+      - unzip terraform.zip
+      - mv terraform /usr/local/bin/
+  pre_build:
+    commands:
+      - cd IaaC
+      - terraform init -reconfigure -backend-config=dev/backend.tfvars
+  build:
+    commands:
+      - terraform validate
+      - terraform plan -var-file=dev/dev.tfvars
+      - terraform apply -auto-approve -var-file=dev/dev.tfvars
