@@ -1,5 +1,5 @@
-bucket         = "project1-terraform-state-dev-s3"
-key            = "jobname-dev-use.tfstate"
+bucket         = "projectecom-terraform-state-dev-s3"
+key            = "infosys-dev-use.tfstate"
 region         = "us-east-1"
-dynamodb_table = "terraform-locks-dev"
+dynamodb_table = "terraformecom-locks-dev"
 encrypt        = true
