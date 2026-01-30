@@ -1,4 +1,4 @@
-project     = "infosys-leave"
+project     = "infsos-hari-leave"
 application = "portal"
 
 environment    = "dev"
