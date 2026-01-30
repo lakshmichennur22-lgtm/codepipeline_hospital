@@ -159,7 +159,10 @@ resource "aws_codebuild_project" "cleanup" {
     buildspec = "buildspec-destroy.yml"
   }
 }
-
+resource "aws_codestarconnections_connection" "github" {
+  name          = "github-connection"
+  provider_type = "GitHub"
+}
 # -----------------------------
 # CODEPIPELINE
 # -----------------------------
@@ -179,15 +182,15 @@ resource "aws_codepipeline" "frontend_pipeline" {
     action {
       name             = "GitHub_Source"
       category         = "Source"
-      owner            = "ThirdParty"
-      provider         = "GitHub"
+      owner            = "AWS"
+      provider         = "CodeStarSourceConnection"
       version          = "1"
       output_artifacts = ["source"]
 
       configuration = {
-        Owner      = "lakshmichennur22-lgtm"
-        Repo       = "https://github.com/lakshmichennur22-lgtm/codepipeline_hospital.git"
-        Branch     = "main"
+        ConnectionArn    = aws_codestarconnections_connection.github.arn
+        FullRepositoryId = "lakshmichennur22-lgtm/codepipeline_hospital"
+        BranchName       = "main"
       }
     }
   }
