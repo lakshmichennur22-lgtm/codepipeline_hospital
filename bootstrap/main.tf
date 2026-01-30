@@ -178,6 +178,7 @@ resource "aws_codepipeline" "frontend_pipeline" {
 
     action {
       name             = "GitHub_Source"
+      category         = "Source"
       owner            = "ThirdParty"
       provider         = "GitHub"
       version          = "1"
