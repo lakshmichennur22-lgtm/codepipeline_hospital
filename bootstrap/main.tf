@@ -68,9 +68,6 @@ resource "aws_iam_role" "codebuild_role" {
     }]
   })
 }
-resource "aws_iam_role" "codepipeline_role" {
-  name = "codepipeline-role"
-}
 resource "aws_iam_role_policy" "codestar_policy" {
   role = aws_iam_role.codepipeline_role.id
 
