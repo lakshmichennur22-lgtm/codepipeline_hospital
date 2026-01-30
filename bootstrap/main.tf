@@ -97,7 +97,8 @@ resource "aws_iam_role_policy" "codebuild_policy" {
           "logs:*",
           "cloudwatch:*",
           "ec2:*",
-          "iam:*"
+          "iam:*",
+          "dynamodb:*"
         ]
         Resource = "*"
       }
