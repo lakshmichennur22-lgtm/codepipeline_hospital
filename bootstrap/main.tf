@@ -261,23 +261,6 @@ resource "aws_codepipeline" "CICD_pipeline" {
     }
   }
 
-  # INFRA STAGE
-  stage {
-    name = "Infra"
-
-    action {
-      name            = "Terraform_Apply"
-      category        = "Build"
-      owner           = "AWS"
-      provider        = "CodeBuild"
-      version         = "1"
-      input_artifacts = ["source"]
-
-      configuration = {
-        ProjectName = aws_codebuild_project.infra.name
-      }
-    }
-  }
 
   # CI STAGE
   stage {
