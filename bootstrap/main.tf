@@ -294,7 +294,7 @@ resource "aws_codepipeline" "CICD_pipeline" {
       input_artifacts = ["build"]
 
       configuration = {
-        BucketName = "frontend-website-bucket"
+        BucketName = "infsos-hari-leave-portal-dev-use-s3-bucket"
         Extract    = "true"
       }
     }
